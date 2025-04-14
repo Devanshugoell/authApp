@@ -1,13 +1,14 @@
-// src/App.jsx
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import PrivateRoute from "./Components/PrivateRoute";
+import { Route, Routes, Navigate } from "react-router-dom";
+import Login from "./pages/Login/Login";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import PrivateRoute from "./components/PrivateRoute";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
-    <Router>
+    <AuthProvider>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/dashboard"
@@ -17,9 +18,8 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<Login />} />
       </Routes>
-    </Router>
+    </AuthProvider>
   );
 }
 

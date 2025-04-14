@@ -1,0 +1,9 @@
+.container {
+  padding: 2rem;
+}
+.username,
+.password {
+  display: block;
+  margin: 1rem 0;
+  width: 90vw;
+}

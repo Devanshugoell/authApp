@@ -1,33 +1,25 @@
 import { useState } from "react";
-import api from "../api/api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../api/api";
+import "./Login.css";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     try {
-      const response = await api.post(
-        "/login",
-        {
-          username,
-          password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await api.post("/login", {
+        username,
+        password,
+      });
 
       const { access_token, refresh_token, user } = response.data;
 
-      localStorage.setItem("access_token", access_token);
-      localStorage.setItem("refresh_token", refresh_token);
-      localStorage.setItem("user", JSON.stringify(user));
-
+      login(access_token, refresh_token, user);
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
@@ -36,20 +28,20 @@ function Login() {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div className="container">
       <h2>Login</h2>
       <input
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        style={{ display: "block", margin: "1rem 0", width: "100vw" }}
+        className="username"
       />
       <input
         placeholder="Password"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        style={{ display: "block", marginBottom: "1rem", width: "100vw" }}
+        className="password"
       />
       <button onClick={handleLogin}>Login</button>
     </div>
