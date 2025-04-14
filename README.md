@@ -15,7 +15,7 @@ npm (Node package manager)
 ## Clone the repository
 
 git clone https://github.com/Devanshugoell/authApp.git  
-cd react-auth-integration
+cd authApp
 
 ## Install dependencies: In the project directory, run:
 
