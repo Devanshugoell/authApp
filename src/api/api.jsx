@@ -7,7 +7,7 @@ import {
 } from "../utils/auth"; // Import functions to manage tokens
 
 const api = axios.create({
-  baseURL: "http://206.189.228.234:8000", // Update if needed
+  baseURL: "http://206.189.228.234:8000",
 });
 
 // Request Interceptor
