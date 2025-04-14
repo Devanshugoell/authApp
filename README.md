@@ -31,7 +31,7 @@ This will start the app in development mode. Open http://localhost:3000 to view 
 
 Login Page: Users can log in with the provided credentials.
 
-Token Management: The app automatically stores access tokens in local storage and refresh tokens in cookies.
+Token Management: The app automatically stores access tokens in local storage .
 
 Session Handling: The access token is automatically refreshed when expired.
 
