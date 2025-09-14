@@ -1,7 +1,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import Login from "./pages/Login/Login";
+import Login from "./Pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./Components/PrivateRoute";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {

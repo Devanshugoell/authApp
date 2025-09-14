@@ -5,7 +5,7 @@ import api from "../../api/api";
 import "./Login.css";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -13,9 +13,11 @@ function Login() {
   const handleLogin = async () => {
     try {
       const response = await api.post("/login", {
-        username,
+        email,
         password,
       });
+
+      console.log(response, "email: " + email, "password:", password);
 
       const { access_token, refresh_token, user } = response.data;
 
@@ -23,6 +25,7 @@ function Login() {
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
+      console.log("email " + email, "password", password);
       alert("Login failed! Please check your credentials.");
     }
   };
@@ -31,9 +34,9 @@ function Login() {
     <div className="container">
       <h2>Login</h2>
       <input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Enter Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         className="username"
       />
       <input

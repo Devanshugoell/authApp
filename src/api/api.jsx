@@ -4,15 +4,15 @@ import {
   getToken,
   setAuthTokens,
   logout,
-} from "../utils/auth"; // Import functions to manage tokens
+} from "../utils/auth";
 
 const api = axios.create({
-  baseURL: "http://206.189.228.234:8000",
+  baseURL: "https://api.escuelajs.co/api/v1/auth",
 });
 
 // Request Interceptor
 api.interceptors.request.use((config) => {
-  const token = getToken(); // Use the function to get access token
+  const token = getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -25,45 +25,44 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Handle token expiration (401)
+    // Handle expired token (401)
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
       try {
-        const refreshToken = getRefreshToken(); // Get the refresh token
+        const refreshToken = getRefreshToken();
 
         if (refreshToken) {
-          // Make a request to the refresh endpoint to get a new access token
-          const res = await axios.post("http://206.189.228.234:8000/refresh", {
-            refresh_token: refreshToken,
-          });
+          // ✅ Use refresh endpoint
+          const res = await axios.post(
+            "https://api.escuelajs.co/api/v1/auth/refresh-token",
+            {
+              refreshToken, // 👈 correct key as per docs
+            }
+          );
 
-          // Store the new tokens in localStorage
+          // Store new tokens
           setAuthTokens(
             res.data.access_token,
             res.data.refresh_token,
             res.data.user
           );
 
-          // Update the authorization header with the new access token
-          api.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${res.data.access_token}`;
+          // Update header
+          api.defaults.headers.common.Authorization = `Bearer ${res.data.access_token}`;
 
-          // Retry the original request with the new access token
+          // Retry original request
           return api(originalRequest);
         } else {
-          // If no refresh token is found, log the user out
           logout();
           return Promise.reject(error);
         }
       } catch (refreshError) {
-        // If refresh fails, log the user out
         logout();
         return Promise.reject(refreshError);
       }
     }
 
-    // If the error is not due to an expired token, reject the promise
     return Promise.reject(error);
   }
 );
