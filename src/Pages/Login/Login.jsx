@@ -12,20 +12,29 @@ function Login() {
 
   const handleLogin = async () => {
     try {
+      // Step 1: Login and get tokens
       const response = await api.post("/login", {
         email,
         password,
       });
 
-      console.log(response, "email: " + email, "password:", password);
+      const { access_token, refresh_token } = response.data;
 
-      const { access_token, refresh_token, user } = response.data;
+      // Step 2: Fetch user profile with new access token
+      const profileResponse = await api.get("/profile", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
 
+      const user = profileResponse.data;
+
+      // Step 3: Save tokens + user into AuthContext
       login(access_token, refresh_token, user);
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
-      console.log("email " + email, "password", password);
       alert("Login failed! Please check your credentials.");
     }
   };

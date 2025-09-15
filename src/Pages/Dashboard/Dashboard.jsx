@@ -23,6 +23,7 @@ function Dashboard() {
       <p>Email: {user?.email}</p>
       <p>Role: {user?.role}</p>
       <p>username : {user?.username}</p>
+      <img src={user?.avatar} alt="user avator" />
       <button onClick={handleLogout} className="button">
         Logout
       </button>
